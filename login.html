@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Alvis Abreo</title>
+    <meta name="robots" content="noindex">
     <style>
         * {
             margin: 0;
@@ -132,7 +133,7 @@
         </form>
         <p class="error" id="error"></p>
 
-        <a href="facts.html" class="back-link">← Back to Facts</a>
+        <a href="/facts" class="back-link">← Back to Facts</a>
     </div>
 
     <script>
@@ -162,7 +163,7 @@
                     try {
                         sessionStorage.setItem('factsKey', input.value);
                     } catch (err) {}
-                    window.location.href = 'facts.html';
+                    window.location.href = '/facts';
                     return;
                 }
                 error.textContent = 'Nope. Nice try though 😏';

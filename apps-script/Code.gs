@@ -31,7 +31,7 @@ function doGet() {
   return json({ ok: true, facts: facts });
 }
 
-// POST body (JSON): { key, action: 'check' | 'add' | 'delete', text, row }
+// POST body (JSON): { key, action: 'check' | 'add' | 'edit' | 'delete', text, row, newText }
 function doPost(e) {
   let body;
   try {
@@ -58,15 +58,23 @@ function doPost(e) {
       return json({ ok: true });
     }
 
-    if (body.action === 'delete') {
+    if (body.action === 'delete' || body.action === 'edit') {
       const row = Number(body.row);
-      // Only delete if the row still holds the same fact, in case the sheet changed.
-      if (row >= 1 && row <= sheet.getLastRow() &&
-          String(sheet.getRange(row, 1).getValue()).trim() === body.text) {
+      // Only touch the row if it still holds the same fact, in case the sheet changed.
+      if (!(row >= 1 && row <= sheet.getLastRow() &&
+            String(sheet.getRange(row, 1).getValue()).trim() === body.text)) {
+        return json({ ok: false, error: 'Fact not found. Refresh and try again.' });
+      }
+
+      if (body.action === 'delete') {
         sheet.deleteRow(row);
         return json({ ok: true });
       }
-      return json({ ok: false, error: 'Fact not found. Refresh and try again.' });
+
+      const newText = String(body.newText || '').trim();
+      if (!newText) return json({ ok: false, error: 'Empty fact' });
+      sheet.getRange(row, 1).setValue(newText);
+      return json({ ok: true });
     }
 
     return json({ ok: false, error: 'Unknown action' });

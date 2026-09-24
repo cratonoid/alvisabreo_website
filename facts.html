@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facts No One Tells You - Alvis Abreo</title>
+    <link rel="canonical" href="https://alvisabreo.com/facts">
     <style>
         * {
             margin: 0;
@@ -183,18 +184,51 @@
             overflow-wrap: anywhere;
         }
 
+        .edit-btn,
         .delete-btn {
             background: none;
             border: none;
-            color: #fca5a5;
-            font-size: 1.2rem;
+            color: white;
+            font-size: 1.1rem;
             cursor: pointer;
             opacity: 0.6;
             flex-shrink: 0;
         }
 
+        .delete-btn {
+            color: #fca5a5;
+            font-size: 1.2rem;
+        }
+
+        .edit-btn:hover,
         .delete-btn:hover {
             opacity: 1;
+        }
+
+        .edit-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .edit-area textarea {
+            width: 100%;
+            min-height: 70px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 10px 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            border-radius: 10px;
+            resize: vertical;
+            outline: none;
+        }
+
+        .edit-area .add-actions .btn {
+            padding: 6px 18px;
+            font-size: 0.95rem;
         }
 
         .empty {
@@ -234,8 +268,8 @@
 <body>
     <div class="container">
         <div class="top-bar">
-            <a href="index.html">← Home</a>
-            <a href="login.html" id="loginLink">🔐 Login</a>
+            <a href="/">← Home</a>
+            <a href="/login" id="loginLink">🔐 Login</a>
             <button id="logoutBtn" style="display: none;">Logout 👋</button>
         </div>
 
@@ -314,6 +348,15 @@
                 item.appendChild(text);
 
                 if (loggedIn) {
+                    const edit = document.createElement('button');
+                    edit.className = 'edit-btn';
+                    edit.title = 'Edit fact';
+                    edit.textContent = '✏️';
+                    edit.addEventListener('click', function() {
+                        startEditing(item, fact);
+                    });
+                    item.appendChild(edit);
+
                     const del = document.createElement('button');
                     del.className = 'delete-btn';
                     del.title = 'Delete fact';
@@ -334,6 +377,67 @@
 
                 list.appendChild(item);
             });
+        }
+
+        // Swaps a fact's text for a text box with Save / Cancel.
+        function startEditing(item, fact) {
+            const number = item.querySelector('.fact-number');
+            item.innerHTML = '';
+            item.appendChild(number);
+
+            const area = document.createElement('div');
+            area.className = 'edit-area';
+
+            const input = document.createElement('textarea');
+            input.value = fact.text;
+
+            const actions = document.createElement('div');
+            actions.className = 'add-actions';
+
+            const save = document.createElement('button');
+            save.className = 'btn';
+            save.textContent = 'Save 💾';
+
+            const cancel = document.createElement('button');
+            cancel.className = 'btn';
+            cancel.textContent = 'Cancel';
+            cancel.addEventListener('click', loadFacts);
+
+            const status = document.createElement('p');
+            status.className = 'status';
+
+            save.addEventListener('click', async function() {
+                const newText = input.value.trim();
+                if (!newText) return;
+                if (newText === fact.text) {
+                    loadFacts();
+                    return;
+                }
+
+                save.disabled = true;
+                cancel.disabled = true;
+                status.textContent = '';
+                try {
+                    const result = await callApi({ action: 'edit', row: fact.row, text: fact.text, newText: newText });
+                    if (result.ok) {
+                        loadFacts();
+                        return;
+                    }
+                    status.textContent = result.error;
+                } catch (err) {
+                    status.textContent = "Couldn't reach the server. Try again.";
+                }
+                save.disabled = false;
+                cancel.disabled = false;
+            });
+
+            actions.appendChild(save);
+            actions.appendChild(cancel);
+            area.appendChild(input);
+            area.appendChild(actions);
+            area.appendChild(status);
+            item.appendChild(area);
+            input.focus();
         }
 
         async function loadFacts() {
