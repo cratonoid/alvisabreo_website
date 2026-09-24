@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Alvis Abreo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(0, 0, 0, 0.85) 100%),
+                url('https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=1920&q=80');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: rgba(20, 20, 20, 0.85);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 50px;
+            text-align: center;
+            width: 100%;
+            max-width: 420px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub-message {
+            opacity: 0.8;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 14px 18px;
+            font-size: 1rem;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .error {
+            color: #fca5a5;
+            min-height: 1.5rem;
+            margin-top: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: white;
+            opacity: 0.7;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>🔐 Admin Login</h1>
+        <p class="sub-message">Only Alvis Bhai gets past this door.</p>
+
+        <form id="loginForm">
+            <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+            <button type="submit">Let Me In</button>
+        </form>
+        <p class="error" id="error"></p>
+
+        <a href="facts.html" class="back-link">← Back to Facts</a>
+    </div>
+
+    <script>
+        // Google Apps Script web app that checks the password (see apps-script/Code.gs).
+        const API_URL = 'https://script.google.com/macros/s/AKfycbybbUebdS8ekJ7s5W2veMPEEexy2xe8qgpSyOqg4qIct0fJ9uck8vA_mQb8aPnchbiRFg/exec';
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const input = document.getElementById('password');
+            const button = this.querySelector('button');
+            const error = document.getElementById('error');
+            error.textContent = '';
+            button.disabled = true;
+            button.textContent = 'Checking...';
+
+            try {
+                // text/plain avoids a CORS preflight, which Apps Script doesn't support.
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'check', key: input.value })
+                });
+                const result = await response.json();
+
+                if (result.ok) {
+                    try {
+                        sessionStorage.setItem('factsKey', input.value);
+                    } catch (err) {}
+                    window.location.href = 'facts.html';
+                    return;
+                }
+                error.textContent = 'Nope. Nice try though 😏';
+                input.value = '';
+            } catch (err) {
+                error.textContent = "Couldn't reach the server. Try again.";
+            }
+
+            button.disabled = false;
+            button.textContent = 'Let Me In';
+        });
+    </script>
+</body>
+</html>
