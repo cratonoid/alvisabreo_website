@@ -235,24 +235,9 @@
                 <small style="display:block; font-size:0.8rem; opacity:0.8;">(Yes, I'm interesting)</small>
             </a>
             
-            <a href="#projects" class="nav-button" data-emoji="💻" id="projectsBtn">
-                My Projects
-                <small style="display:block; font-size:0.8rem; opacity:0.8;">(The cool stuff I make)</small>
-            </a>
-            
-            <a href="#skills" class="nav-button" data-emoji="🚀" id="skillsBtn">
-                Skills
-                <small style="display:block; font-size:0.8rem; opacity:0.8;">(Things I'm good at)</small>
-            </a>
-            
             <a href="/facts" class="nav-button" data-emoji="🧠" id="factsBtn">
                 Facts
                 <small style="display:block; font-size:0.8rem; opacity:0.8;">(Stuff no one tells you)</small>
-            </a>
-
-            <a href="#secret" class="nav-button" data-emoji="🎭" id="secretBtn">
-                Secret Page
-                <small style="display:block; font-size:0.8rem; opacity:0.8;">(You know you want to)</small>
             </a>
         </div>
 
@@ -262,42 +247,6 @@
     </div>
 
     <script>
-        document.getElementById('secretBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const popup = document.createElement('div');
-            popup.className = 'popup-container';
-            
-            popup.innerHTML = `
-                <h2 style="font-size: 2rem; margin-bottom: 20px;">🚫 Access Denied</h2>
-                <p style="font-size: 1.3rem; margin-bottom: 30px;">Sorry, you're <strong>NOT COOL ENOUGH</strong> for this page.</p>
-                <button id="closePopup" style="
-                    background: rgba(255, 255, 255, 0.2);
-                    border: 2px solid rgba(255, 255, 255, 0.4);
-                    color: white;
-                    padding: 12px 30px;
-                    font-size: 1rem;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                ">Fine, Whatever 😒</button>
-            `;
-            
-            const overlay = document.createElement('div');
-            overlay.className = 'popup-overlay';
-            
-            document.body.appendChild(overlay);
-            document.body.appendChild(popup);
-            
-            function closePopup() {
-                popup.remove();
-                overlay.remove();
-            }
-            
-            document.getElementById('closePopup').addEventListener('click', closePopup);
-            overlay.addEventListener('click', closePopup);
-        });
-
         document.getElementById('aboutBtn').addEventListener('click', function(e) {
             e.preventDefault();
             
@@ -334,42 +283,6 @@
             overlay.addEventListener('click', closePopup);
         });
 
-        document.getElementById('skillsBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const popup = document.createElement('div');
-            popup.className = 'popup-container';
-            
-            popup.innerHTML = `
-                <h2 style="font-size: 2rem; margin-bottom: 20px;">🎯 My Skills</h2>
-                <p style="font-size: 1.3rem; margin-bottom: 30px;">Good in <strong>EVERYTHING</strong>,<br>Great at <strong>NOTHING</strong>.</p>
-                <button id="closeSkillsPopup" style="
-                    background: rgba(255, 255, 255, 0.2);
-                    border: 2px solid rgba(255, 255, 255, 0.4);
-                    color: white;
-                    padding: 12px 30px;
-                    font-size: 1rem;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                ">Sounds About Right 🤷</button>
-            `;
-            
-            const overlay = document.createElement('div');
-            overlay.className = 'popup-overlay';
-            
-            document.body.appendChild(overlay);
-            document.body.appendChild(popup);
-            
-            function closePopup() {
-                popup.remove();
-                overlay.remove();
-            }
-            
-            document.getElementById('closeSkillsPopup').addEventListener('click', closePopup);
-            overlay.addEventListener('click', closePopup);
-        });
-
         document.getElementById('businessesBtn').addEventListener('click', function(e) {
             e.preventDefault();
             
@@ -380,7 +293,7 @@
             popup.innerHTML = `
                 <h2 style="font-size: 2rem; margin-bottom: 30px;">💼 My Businesses</h2>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <a href="https://handpikd.alvisabreo.com/" target="_blank" class="business-option" style="
+                    <a href="https://handpikd.co/" target="_blank" class="business-option" style="
                         background: rgba(255, 255, 255, 0.15);
                         border: 2px solid rgba(255, 255, 255, 0.3);
                         color: white;
@@ -420,42 +333,6 @@
             }
             
             document.getElementById('closeBusinessPopup').addEventListener('click', closePopup);
-            overlay.addEventListener('click', closePopup);
-        });
-
-        document.getElementById('projectsBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const popup = document.createElement('div');
-            popup.className = 'popup-container';
-            
-            popup.innerHTML = `
-                <h2 style="font-size: 2rem; margin-bottom: 20px;">💸 My Projects</h2>
-                <p style="font-size: 1.3rem; margin-bottom: 30px;">Getting rich <strong>SOMEHOW</strong>.</p>
-                <button id="closeProjectsPopup" style="
-                    background: rgba(255, 255, 255, 0.2);
-                    border: 2px solid rgba(255, 255, 255, 0.4);
-                    color: white;
-                    padding: 12px 30px;
-                    font-size: 1rem;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                ">One Day... 😅</button>
-            `;
-            
-            const overlay = document.createElement('div');
-            overlay.className = 'popup-overlay';
-            
-            document.body.appendChild(overlay);
-            document.body.appendChild(popup);
-            
-            function closePopup() {
-                popup.remove();
-                overlay.remove();
-            }
-            
-            document.getElementById('closeProjectsPopup').addEventListener('click', closePopup);
             overlay.addEventListener('click', closePopup);
         });
     </script>
