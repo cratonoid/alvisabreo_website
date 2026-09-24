@@ -1,4 +1,4 @@
-// Google Apps Script backend for facts.html.
+// Google Apps Script backend for holygrail.html.
 // Paste this into Extensions → Apps Script of the facts Google Sheet.
 // Put your real password in ADMIN_KEY inside the Apps Script editor only —
 // don't commit it here, this repo is public.
